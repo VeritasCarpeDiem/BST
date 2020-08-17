@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace BST
@@ -17,7 +18,25 @@ namespace BST
 
         public Node<T> Right;
 
+        public int ChildCount
+        {
+            get
+            {
+                int Count = 0;
+                if (Left != null || Right != null)
+                {
+                    Count++;
+                }
+                return Count;
+            }
 
+            set => ChildCount = value;
+        }
+
+        public bool IsChildLeft => Parent == null ? false : Parent.Left == this; //why not just put true?
+        //A:need to account for case where you traverse the right node
+
+        public bool IsChildRight => Parent == null ? false : Parent.Right == this;
         public Node(T value, Node<T> parent) //? default parameter
         {
             Value = value;
@@ -31,7 +50,6 @@ namespace BST
             Value = value;
             Parent = null;
             NodeCount = 1;
-
         }
     }
 
@@ -48,6 +66,7 @@ namespace BST
         }
 
         public int Count { get; private set; }
+
 
         private Node<T> Maximum(Node<T> node)
         {
@@ -78,7 +97,7 @@ namespace BST
                     {
                         Current.Left = new Node<T>(Value, Current);
                         break;
-                        
+
                     }
                     Current = Current.Left;
                 }
@@ -116,7 +135,7 @@ namespace BST
 
 
                     ////2.
-                    
+
                     //if (Current.Right == null)
                     //{
                     //    Current.NodeCount++;
@@ -131,9 +150,9 @@ namespace BST
         }
         public bool Delete(T Value)
         {
-            Node<T> NodeToDelete = Find(Value);
-            //2 cases: 1. Node to delete does not exist 2. Node got deleted
-            if(NodeToDelete==null)
+            Node<T> NodeToDelete = Find(Value); //returns current node of this value
+            //2 cases: 1. If Node to Delete Does not exist 2. Node got deleted
+            if (NodeToDelete == null)
             {
                 return false;
             }
@@ -143,10 +162,60 @@ namespace BST
             return true;
         }
 
-        private Node<T> Delete(Node<T> node)
+        private void Delete(Node<T> Node)
         {
-            //4 cases: Parent has 1. 0 child 2. 1 child 3. 2 child 
-            //4. If node you want to delete is has NodeCount>1
+            //4 cases: Parent has 1. 0 child 2. 1 child 3. 2 child 4. If node you want to delete is has NodeCount>1
+            if (Node.ChildCount == 2)
+            {
+                //go left once, then keep on traversing right--similar concept to binary search from guessing game
+                Node<T> Replacement = Maximum(Node.Left); //takes log(N) time to traverse this way rather than nlog(N) if I used a list of the ordered tree 
+                                          
+                Node.Value = Replacement.Value;
+                Node = Replacement;
+            }
+
+            
+            if (Node.ChildCount == 1) //set child equal to Parent
+            {
+                //child node depends whether it is the right or left node of a parent
+                Node<T> Child = Node.Left == null ? Node.Right : Node.Left; 
+
+                // 3 cases:
+                if (Node == Root)
+                {
+                    Root = Child;
+                }
+                else if (Node.IsChildLeft)
+                {
+                    Node.Parent.Left = Child;
+                }
+                else//Node.ChildIsRight
+                {
+                    Node.Parent.Right =Child ;
+                }
+
+                Child.Parent = Node.Parent; //set the Node's Parent to the Child's Parent
+            }
+            else if (Node.ChildCount == 0)
+            {
+                //3 cases:
+                if (Node == Root)
+                {
+                    Root = null;
+                }
+                else if (Node.IsChildLeft)
+                {
+                    Node.Parent.Left = null;
+                }
+                else//Node.ChildIsRight
+                {
+                    Node.Parent.Right = null;
+                }
+            }
+            else //if Node to delete has NodeCount>1
+            {
+                Node.NodeCount--;
+            }
 
         }
         public Node<T> Find(T value)
