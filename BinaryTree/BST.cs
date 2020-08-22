@@ -162,23 +162,25 @@ namespace BST
             return true;
         }
 
-        private void Delete(Node<T> Node)
+        private bool HelperDelete(Node<T> Node)
         {
             //4 cases: Parent has 1. 0 child 2. 1 child 3. 2 child 4. If node you want to delete is has NodeCount>1
             if (Node.ChildCount == 2)
             {
                 //go left once, then keep on traversing right--similar concept to binary search from guessing game
                 Node<T> Replacement = Maximum(Node.Left); //takes log(N) time to traverse this way rather than nlog(N) if I used a list of the ordered tree 
-                                          
+
                 Node.Value = Replacement.Value;
                 Node = Replacement;
+
+                return true;
             }
 
-            
+
             if (Node.ChildCount == 1) //set child equal to Parent
             {
                 //child node depends whether it is the right or left node of a parent
-                Node<T> Child = Node.Left == null ? Node.Right : Node.Left; 
+                Node<T> Child = Node.Left == null ? Node.Right : Node.Left;
 
                 // 3 cases:
                 if (Node == Root)
@@ -191,10 +193,12 @@ namespace BST
                 }
                 else//Node.ChildIsRight
                 {
-                    Node.Parent.Right =Child ;
+                    Node.Parent.Right = Child;
                 }
 
                 Child.Parent = Node.Parent; //set the Node's Parent to the Child's Parent
+
+                return true;
             }
             else if (Node.ChildCount == 0)
             {
@@ -211,12 +215,20 @@ namespace BST
                 {
                     Node.Parent.Right = null;
                 }
-            }
-            else //if Node to delete has NodeCount>1
-            {
-                Node.NodeCount--;
+
+                return true;
             }
 
+            return false;
+        }
+
+        private void Delete(Node<T> Node)
+        {
+            if (HelperDelete(Node) == false)
+            {
+                Node.NodeCount--;
+                HelperDelete(Node);
+            }
         }
         public Node<T> Find(T value)
         {
@@ -262,7 +274,88 @@ namespace BST
             return Find(value) != null;
         }
 
+        public Queue<Node<T>> PreOrder()
+        {
+            Stack<Node<T>> Input = new Stack<Node<T>>();
+            Queue<Node<T>> Output = new Queue<Node<T>>();
 
+            Input.Push(Root);
+            while (Input.Count > 0)
+            {
+                Node<T> current = Input.Pop();
+
+                Output.Enqueue(current);
+
+                if (current.Right != null)
+                {
+                    Input.Push(current.Right);
+                }
+
+                if (current.Left != null)
+                {
+                    Input.Push(current.Left);
+                }
+            }
+
+            return Output;
+        }
+
+        //public List<Node<T>> PreOrderWrapper()
+        //{
+        //    List<Node<T>> returnType = new List<Node<T>>();
+        //    PreOrder(returnType, Root);
+        //    return returnType;
+        //}
+
+        //private void PreOrder(List<Node<T>> returnType, Node<T> current)
+        //{
+        //    returnType.Add(current);
+        //    if(current.Left != null)
+        //    {
+        //        PreOrder(returnType, current.Left);
+        //    }
+        //    if(current.Right != null)
+        //    {
+        //        PreOrder(returnType, current.Right);
+        //    }
+        //}
+        public Queue<Node<T>> InOrder()
+        {
+            Stack<Node<T>> Input = new Stack<Node<T>>();
+            Queue<Node<T>> Output = new Queue<Node<T>>();
+
+            Input.Push(Root);
+            while (Input.Count > 0)
+            {
+                Node<T> current = Input.Peek();
+                if (current.Left != null)
+                {
+                    Input.Push(current.Left);
+                    continue;
+                }
+                Input.Pop();
+                Output.Enqueue(current);
+                if(current.Right !=null)
+                {
+                    Input.Push(current.Right);
+
+                }
+            }
+            return Output;
+        }
+
+        public void InOrder(Queue<Node<T>> returns, Node<T> node)
+        {
+            if(node.Left != null)
+            {
+                InOrder(returns, node.Left);
+            }
+            returns.Enqueue(node);
+            if(node.Right != null)
+            {
+                InOrder(returns, node.Right);
+            }
+        }
     }
 
 }

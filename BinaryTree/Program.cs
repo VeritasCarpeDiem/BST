@@ -11,13 +11,38 @@ namespace BinaryTree
         {
             var bst = new BST<int>();
 
-            bst.Insert(5);
-            bst.Insert(7);
-            bst.Insert(3);
+            bst.Insert(100); //F
+            bst.Insert(50); //B
+            bst.Insert(30); //A
+            bst.Insert(60); //D
+            bst.Insert(55); //C
+            bst.Insert(70); //E
+            bst.Insert(200); //G
+            bst.Insert(250); // I
+            bst.Insert(230); // H
 
-            bst.Delete(3);
+            Dictionary<int, string> map = new Dictionary<int, string>()
+            {
+                [100] = "F",
+                [50] = "B",
+                [30] = "A",
+                [60] = "D",
+                [55] = "C",
+                [70] = "E",
+                [200] = "G",
+                [250] = "I",
+                [230] = "H"
+            };
 
-            ;
+            var returnPath = bst.InOrder();
+
+            while (returnPath.Count > 0)
+            {
+                Console.Write($"{map[returnPath.Dequeue().Value]}->");
+            }
+            bst.InOrder();
+           ;
         }
+       
     }
 }
