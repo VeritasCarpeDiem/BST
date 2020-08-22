@@ -323,19 +323,26 @@ namespace BST
         {
             Stack<Node<T>> Input = new Stack<Node<T>>();
             Queue<Node<T>> Output = new Queue<Node<T>>();
-
+            List<Node<T>> Visited = new List<Node<T>>();
             Input.Push(Root);
             while (Input.Count > 0)
             {
                 Node<T> current = Input.Peek();
+                Visited.Add(current);
+
                 if (current.Left != null)
                 {
                     Input.Push(current.Left);
                     continue;
                 }
-                Input.Pop();
+
+                while (Input.Count > 0 && Visited.Contains(Input.Peek()))
+                {
+                    Output.Enqueue(Input.Pop());
+                }
                 Output.Enqueue(current);
-                if(current.Right !=null)
+
+                if (current.Right != null)
                 {
                     Input.Push(current.Right);
 
@@ -346,12 +353,12 @@ namespace BST
 
         public void InOrder(Queue<Node<T>> returns, Node<T> node)
         {
-            if(node.Left != null)
+            if (node.Left != null)
             {
                 InOrder(returns, node.Left);
             }
             returns.Enqueue(node);
-            if(node.Right != null)
+            if (node.Right != null)
             {
                 InOrder(returns, node.Right);
             }
