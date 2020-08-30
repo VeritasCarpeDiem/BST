@@ -9,6 +9,14 @@ namespace BinaryTree
     {
         static void Main(string[] args)
         {
+            //var newbst = new BST<char>();
+
+            //newbst.Insert('A');
+
+            //var temp = newbst.InOrder();
+
+
+
             var bst = new BST<int>();
 
             bst.Insert(100); //F
@@ -34,7 +42,7 @@ namespace BinaryTree
                 [230] = "H"
             };
            
-            var returnPath = bst.InOrder();
+            var returnPath = bst.PostOrder();
 
             while (returnPath.Count > 0)
             {

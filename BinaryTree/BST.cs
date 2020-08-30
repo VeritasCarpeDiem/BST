@@ -324,7 +324,7 @@ namespace BST
             Stack<Node<T>> Input = new Stack<Node<T>>();
             Queue<Node<T>> Output = new Queue<Node<T>>();
             List<Node<T>> Visited = new List<Node<T>>();
-            
+
             Input.Push(Root);
             while (Input.Count > 0) //while there are nodes in the stack
             {
@@ -341,7 +341,7 @@ namespace BST
                 {
                     current = Input.Pop();
                     Output.Enqueue(current);
-                    if (current.Right!=null)
+                    if (current.Right != null)
                     {
                         break;
                     }
@@ -370,6 +370,64 @@ namespace BST
             {
                 InOrder(returns, node.Right);
             }
+        }
+
+        public IEnumerable<T> PostOrder(Node<T> node)
+        {
+            Stack<Node<T>> Stack = new Stack<Node<T>>();
+            //Queue<Node<T>> ReturnPath = new Queue<Node<T>>();
+            //List<Node<T>> Visited = new List<Node<T>>();
+
+            //Stack.Push(Root);
+
+            //while (Stack.Count > 0)
+            //{
+            //    Node<T> current = Stack.Peek();
+            //    Visited.Add(current);
+
+            //    if (current.Left != null)
+            //    {
+            //        Stack.Push(current.Left);
+
+            //        continue;
+
+            //    }
+            //    while(Stack.Count>0 && Visited.Contains(current) && current.ChildCount ==0)
+            //    {
+            //        current = Stack.Pop();
+            //        ReturnPath.Enqueue(current);
+            //    }
+            //    if (current.Right != null)
+            //    {
+            //        Stack.Push(current.Right);
+            //    }
+            //}
+            List<T> values = new List<T>();
+            //return ReturnPath;
+            Node<T> LastNodeVisited = null;
+            while(Stack.Count>0 || node !=null)
+            {
+                if(node != null)
+                {
+                    Stack.Push(node);
+                    node = node.Left;
+                }
+                else
+                {
+                    Node<T> PeekNode = Stack.Peek();
+                    if(PeekNode.Right != null && LastNodeVisited != PeekNode.Right)
+                    {
+                        node = PeekNode.Right;
+                    }
+                    else
+                    {
+                        values.Add(PeekNode.Value);
+                        LastNodeVisited = Stack.Pop();
+                    }
+                }
+            }
+
+            return values;
         }
     }
 
