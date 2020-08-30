@@ -156,7 +156,7 @@ namespace BST
             {
                 return false;
             }
-            Delete(NodeToDelete);
+            HelperDelete(NodeToDelete);
             Count--;
 
             return true;
@@ -300,32 +300,33 @@ namespace BST
             return Output;
         }
 
-        //public List<Node<T>> PreOrderWrapper()
-        //{
-        //    List<Node<T>> returnType = new List<Node<T>>();
-        //    PreOrder(returnType, Root);
-        //    return returnType;
-        //}
+        public List<Node<T>> PreOrderWrapper()
+        {
+            List<Node<T>> returnType = new List<Node<T>>();
+            PreOrder(returnType, Root);
+            return returnType;
+        }
 
-        //private void PreOrder(List<Node<T>> returnType, Node<T> current)
-        //{
-        //    returnType.Add(current);
-        //    if(current.Left != null)
-        //    {
-        //        PreOrder(returnType, current.Left);
-        //    }
-        //    if(current.Right != null)
-        //    {
-        //        PreOrder(returnType, current.Right);
-        //    }
-        //}
+        private void PreOrder(List<Node<T>> returnType, Node<T> current)
+        {
+            returnType.Add(current);
+            if (current.Left != null)
+            {
+                PreOrder(returnType, current.Left);
+            }
+            if (current.Right != null)
+            {
+                PreOrder(returnType, current.Right);
+            }
+        }
         public Queue<Node<T>> InOrder()
         {
             Stack<Node<T>> Input = new Stack<Node<T>>();
             Queue<Node<T>> Output = new Queue<Node<T>>();
             List<Node<T>> Visited = new List<Node<T>>();
+            
             Input.Push(Root);
-            while (Input.Count > 0)
+            while (Input.Count > 0) //while there are nodes in the stack
             {
                 Node<T> current = Input.Peek();
                 Visited.Add(current);
@@ -338,9 +339,15 @@ namespace BST
 
                 while (Input.Count > 0 && Visited.Contains(Input.Peek()))
                 {
-                    Output.Enqueue(Input.Pop());
+                    current = Input.Pop();
+                    Output.Enqueue(current);
+                    if (current.Right!=null)
+                    {
+                        break;
+                    }
+
                 }
-                Output.Enqueue(current);
+                //Output.Enqueue(current);
 
                 if (current.Right != null)
                 {
@@ -348,6 +355,7 @@ namespace BST
 
                 }
             }
+
             return Output;
         }
 
@@ -364,5 +372,6 @@ namespace BST
             }
         }
     }
+
 
 }

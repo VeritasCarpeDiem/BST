@@ -33,15 +33,13 @@ namespace BinaryTree
                 [250] = "I",
                 [230] = "H"
             };
-
+           
             var returnPath = bst.InOrder();
 
             while (returnPath.Count > 0)
             {
                 Console.Write($"{map[returnPath.Dequeue().Value]}->");
             }
-            bst.InOrder();
-           ;
         }
        
     }
