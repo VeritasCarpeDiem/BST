@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Transactions;
 
 namespace BST
 {
@@ -359,6 +360,31 @@ namespace BST
             return Output;
         }
 
+        public IEnumerable<T> InOrderShortVersion()
+        {
+            Stack<Node<T>> Input = new Stack<Node<T>>();
+            Queue<T> Output = new Queue<T>();
+
+            Node<T> Current = Root;
+            
+            while (Current !=null || Input.Count !=0)
+            {
+                if(Current != null)
+                {
+                    Input.Push(Current);
+                    Current = Current.Left;
+                }
+                else
+                {
+                    Current = Input.Pop();
+                    Output.Enqueue(Current.Value);
+                    Current = Current.Right;
+                }
+            }
+            return Output;
+        }
+        
+
         public void InOrder(Queue<Node<T>> returns, Node<T> node)
         {
             if (node.Left != null)
@@ -429,7 +455,76 @@ namespace BST
 
             return values;
         }
-    }
 
+        public IEnumerable<T> PostOrderRecursive()
+        {
+            List<T> Visited = new List<T>();
 
+            HelperPostOrder(Root);
+
+            return Visited;
+
+            void HelperPostOrder(Node<T> current)
+            {
+                
+                if(current ==null)
+                {
+                    return;
+                }
+                HelperPostOrder(current.Left);
+                HelperPostOrder(current.Right);
+                Visited.Add(current.Value);
+            }
+            
+        }
+        public IEnumerable<T> InOrderRecursive()
+        {
+            List<T> list = new List<T>();
+
+            InOrderHelper(Root);
+
+            return list;
+
+            void InOrderHelper(Node<T> node)
+            {
+                if (node == null)
+                {
+                    return;
+                }
+
+                InOrderHelper(node.Left);
+                list.Add(node.Value);
+                InOrderHelper(node.Right);
+
+            }
+        }
+        public IEnumerable<T> BreadthFirst()
+        {
+            
+            Queue<Node<T>> nodes = new Queue<Node<T>>();
+            List<T> Visited = new List<T>();
+            
+            nodes.Enqueue(Root);
+            
+            while (nodes.Count > 0)
+            {
+                Node<T> current = nodes.Dequeue();
+                Visited.Add(current.Value);
+
+                if (current.Left != null)
+                {
+                    nodes.Enqueue(current.Left);
+
+                }
+                if (current.Right != null)
+                {
+                    nodes.Enqueue(current.Right);
+
+                }
+            }
+            return Visited;
+        }
 }
+}
+
+    

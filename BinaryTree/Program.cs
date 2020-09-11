@@ -1,7 +1,9 @@
 ﻿using BST;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 
 namespace BinaryTree
 {
@@ -41,14 +43,32 @@ namespace BinaryTree
                 [250] = "I",
                 [230] = "H"
             };
-           
-            var returnPath = bst.PostOrder();
 
-            while (returnPath.Count > 0)
+            // var returnPath = bst.BreadthFirst();
+
+            //while (returnPath.Count > 0)
+            //{
+            //    Console.Write($"{map[returnPath.Dequeue().Value]}->");
+            //}
+            //foreach (var item in returnPath)
+            //{
+            //    Console.Write($"{item}->");
+            //}
+
+            var returnPath = bst.PostOrderRecursive();
+
+            
+
+            foreach (var item in returnPath)
             {
-                Console.Write($"{map[returnPath.Dequeue().Value]}->");
+                Console.Write($"{item}->");
             }
+
+           
         }
+
        
+
+
     }
 }
