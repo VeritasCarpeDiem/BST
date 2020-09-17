@@ -1,10 +1,10 @@
 ﻿using BST;
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using System.Transactions;
 
 namespace BinaryTree
@@ -65,79 +65,6 @@ namespace BinaryTree
             {
                 Console.Write($"{item}->");
             }
-
-            int[] integers = { 1, 42, 52, 72, 99, 101 };
         }
-
-        class SimpleTree
-        {
-            public int Value { get; set; }
-            public SimpleTree Left { get; set; }
-            public SimpleTree Right { get; set; }
-
-
-            public static SimpleTree MakeTree(int[] numbers) //binary search 
-            {
-                //Since its Sorted, Inorder traversal
-
-                int low = 0;
-                int high = numbers.Length - 1;
-
-                int mid = (low + high) / 2;
-
-                SimpleTree root = new SimpleTree() { Value = numbers[mid] };
-
-                // recursively add to left and right
-
-                root.Left = HelperMakeTree(root.Left, numbers[mid], numbers[high]);// recursive;
-                root.Right = HelperMakeTree(root.Right, numbers[low], numbers[mid]);// recursive
-
-                return root;
-
-                int HelperBinarySearch(int[] numbers, int head, int tail, int index)
-                {
-                    if (tail >= 1)
-                    {
-                        int mid = 1 + (tail - 1) / 2;
-                        if (numbers[mid] == tail)
-                        {
-                            return mid;
-                        }
-                        if (numbers[mid] > index)
-                        {
-                            return HelperBinarySearch(numbers, tail, mid - 1, index);
-                        }
-                        else
-                        {
-                            return HelperBinarySearch(numbers, mid + 1, tail, index);
-                        }
-                    }
-                    return -1;
-                }
-
-                SimpleTree HelperMakeTree(SimpleTree root, int low, int high)
-                {
-                   //base case:
-                   if(low <= high)
-                    {
-                        return root;
-                    }
-
-                    if (root.Value < numbers[mid]) //if # > mid
-                    {
-                         return HelperMakeTree(root, numbers[mid],numbers[high]);
-                    }
-                    else //if #<mid
-                    {
-                        return HelperMakeTree(root, numbers[low], numbers[mid]);
-                    }
-                    
-
-                }
-
-            }
-        }
-
-
     }
 }
